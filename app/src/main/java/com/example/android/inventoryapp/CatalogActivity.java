@@ -2,7 +2,7 @@ package com.example.android.inventoryapp;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,18 +11,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
-import com.example.android.inventoryapp.data.InventoryDbHelper;
 
-public class MainActivity extends AppCompatActivity {
-
-    private InventoryDbHelper mDbHelper;
+public class CatalogActivity extends AppCompatActivity {
+    public static final String LOG_TAG = CatalogActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mDbHelper = new InventoryDbHelper(this);
+        setContentView(R.layout.activity_catalog);
 
         displayDatabaseInfo();
         buttonPutData();
@@ -33,15 +29,19 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                insertData();
+                insertInventory();
                 displayDatabaseInfo();
             }
         });
     }
 
-    private void displayDatabaseInfo() {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayDatabaseInfo();
+    }
 
-        SQLiteDatabase database = mDbHelper.getReadableDatabase();
+    private void displayDatabaseInfo() {
 
         String[] projection = {
                 InventoryEntry._ID,
@@ -52,11 +52,9 @@ public class MainActivity extends AppCompatActivity {
                 InventoryEntry.COLUMN_SUPPLIER_NAME,
                 InventoryEntry.COLUMN_SUPPLIER_PHONE};
 
-        Cursor cursor = database.query(
-                InventoryEntry.TABLE_NAME,
+        Cursor cursor = getContentResolver().query(
+                InventoryEntry.CONTENT_URI,
                 projection,
-                null,
-                null,
                 null,
                 null,
                 null);
@@ -104,18 +102,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void insertData() {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+    private void insertInventory() {
 
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Android");
-        values.put(InventoryEntry.COLUMN_DESCRIPTION, "");
+        values.put(InventoryEntry.COLUMN_DESCRIPTION, "bc");
         values.put(InventoryEntry.COLUMN_PRICE, 5);
         values.put(InventoryEntry.COLUMN_QUANTITY, 10);
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, "Google");
         values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, "123454321`");
 
-        long newRowId = db.insert(InventoryEntry.TABLE_NAME, null, values);
-        Log.v("Main Activity", "New Row Number: " + newRowId);
+        Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
     }
 }
