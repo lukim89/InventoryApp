@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 InventoryEntry.COLUMN_PRODUCT_NAME,
                 InventoryEntry.COLUMN_PRICE,
                 InventoryEntry.COLUMN_QUANTITY,
+                InventoryEntry.COLUMN_DESCRIPTION,
                 InventoryEntry.COLUMN_SUPPLIER_NAME,
                 InventoryEntry.COLUMN_SUPPLIER_PHONE};
 
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     InventoryEntry.COLUMN_PRODUCT_NAME + " - " +
                     InventoryEntry.COLUMN_PRICE + " - " +
                     InventoryEntry.COLUMN_QUANTITY + " - " +
+                    InventoryEntry.COLUMN_DESCRIPTION + " - " +
                     InventoryEntry.COLUMN_SUPPLIER_NAME + " - " +
                     InventoryEntry.COLUMN_SUPPLIER_PHONE + "\n");
 
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             int productNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
             int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_QUANTITY);
+            int descriptionColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_DESCRIPTION);
             int supplierNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NAME);
             int supplierPhoneColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_PHONE);
 
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 String currentName = cursor.getString(productNameColumnIndex);
                 int currentPrice = cursor.getInt(priceColumnIndex);
                 int currentQuantity = cursor.getInt(quantityColumnIndex);
+                String currentDescription = cursor.getString(descriptionColumnIndex);
                 String currentSupplierName = cursor.getString(supplierNameColumnIndex);
                 String currentSupplierPhone = cursor.getString(supplierPhoneColumnIndex);
 
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         currentName + " - " +
                         currentPrice + " - " +
                         currentQuantity + " - " +
+                        currentDescription + " - " +
                         currentSupplierName + " - " +
                         currentSupplierPhone) + "\n");
             }
@@ -104,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Android");
+        values.put(InventoryEntry.COLUMN_DESCRIPTION, "");
         values.put(InventoryEntry.COLUMN_PRICE, 5);
         values.put(InventoryEntry.COLUMN_QUANTITY, 10);
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, "Google");
