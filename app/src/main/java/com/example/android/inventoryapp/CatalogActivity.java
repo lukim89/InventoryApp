@@ -1,7 +1,11 @@
 package com.example.android.inventoryapp;
 
+import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -10,20 +14,23 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 
-public class CatalogActivity extends AppCompatActivity {
-    public static final String LOG_TAG = CatalogActivity.class.getSimpleName();
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int INVENTORY_LOADER = 0;
+
+    InventoryCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -31,44 +38,35 @@ public class CatalogActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
+        ListView inventoryListView = findViewById(R.id.inventoryListView);
 
-    private void displayDatabaseInfo() {
+        View emptyView = findViewById(R.id.empty_view);
+        inventoryListView.setEmptyView(emptyView);
 
-        String[] projection = {
-                InventoryEntry._ID,
-                InventoryEntry.COLUMN_PRODUCT_NAME,
-                InventoryEntry.COLUMN_PRICE,
-                InventoryEntry.COLUMN_QUANTITY,
-                InventoryEntry.COLUMN_DESCRIPTION,
-                InventoryEntry.COLUMN_SUPPLIER_NAME,
-                InventoryEntry.COLUMN_SUPPLIER_PHONE};
+        mCursorAdapter = new InventoryCursorAdapter(this, null);
+        inventoryListView.setAdapter(mCursorAdapter);
 
-        Cursor cursor = getContentResolver().query(
-                InventoryEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
+        inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
 
-        ListView inventoryListView = (ListView) findViewById(R.id.inventoryListView);
-        InventoryCursorAdapter adapter = new InventoryCursorAdapter(this, cursor);
-        inventoryListView.setAdapter(adapter);
+                intent.setData(currentProductUri);
+                startActivity(intent);
+            }
+        });
+        getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
     }
 
     private void insertProduct() {
 
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Android");
-        values.put(InventoryEntry.COLUMN_DESCRIPTION, "bc");
         values.put(InventoryEntry.COLUMN_PRICE, 5);
         values.put(InventoryEntry.COLUMN_QUANTITY, 10);
+        values.put(InventoryEntry.COLUMN_DESCRIPTION, "bc");
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, "Google");
         values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, "123454321`");
 
@@ -86,12 +84,37 @@ public class CatalogActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_insert_dummy_data:
                 insertProduct();
-                displayDatabaseInfo();
                 return true;
 
             case R.id.action_delete_all_data:
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        String[] projection = {
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryEntry.COLUMN_PRICE,
+                InventoryEntry.COLUMN_QUANTITY};
+
+        return new CursorLoader(this,
+                InventoryEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mCursorAdapter.swapCursor(null);
     }
 }
