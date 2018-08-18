@@ -14,14 +14,14 @@ import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 public class InventoryProvider extends ContentProvider {
     public static final String LOG_TAG = InventoryProvider.class.getSimpleName();
 
-    private static final int INVENTORY = 100;
-    private static final int INVENTORY_ID = 101;
+    private static final int PRODUCTS = 100;
+    private static final int PRODUCT_ID = 101;
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, INVENTORY);
-        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", INVENTORY_ID);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, PRODUCTS);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", PRODUCT_ID);
     }
 
     private InventoryDbHelper mDbHelper;
@@ -41,10 +41,10 @@ public class InventoryProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
 
         switch (match) {
-            case INVENTORY:
+            case PRODUCTS:
                 cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
-            case INVENTORY_ID:
+            case PRODUCT_ID:
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
@@ -61,7 +61,7 @@ public class InventoryProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case INVENTORY:
+            case PRODUCTS:
                 return insertInventory(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
@@ -74,12 +74,12 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("Product requires a name");
         }
 
-        Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRICE);
+        Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_PRICE);
         if (price != null && price < 0) {
             throw new IllegalArgumentException("Product requires valid price");
         }
 
-        Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_QUANTITY);
+        Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
         if (quantity != null && quantity < 0) {
             throw new IllegalArgumentException("Product requires valid quantity");
         }
@@ -99,9 +99,9 @@ public class InventoryProvider extends ContentProvider {
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case INVENTORY:
+            case PRODUCTS:
                 return updateInventory(uri, contentValues, selection, selectionArgs);
-            case INVENTORY_ID:
+            case PRODUCT_ID:
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateInventory(uri, contentValues, selection, selectionArgs);
@@ -118,15 +118,15 @@ public class InventoryProvider extends ContentProvider {
             }
         }
 
-        if (values.containsKey(InventoryEntry.COLUMN_QUANTITY)) {
-            Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_QUANTITY);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_QUANTITY)) {
+            Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
             if (quantity != null && quantity < 0) {
                 throw new IllegalArgumentException("Product requires valid quantity.");
             }
         }
 
-        if (values.containsKey(InventoryEntry.COLUMN_PRICE)) {
-            Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRICE);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_PRICE)) {
+            Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_PRICE);
             if (price != null && price < 0) {
                 throw new IllegalArgumentException("Product requires valid price.");
             }
@@ -154,10 +154,10 @@ public class InventoryProvider extends ContentProvider {
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case INVENTORY:
+            case PRODUCTS:
                 rowsDeleted = database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case INVENTORY_ID:
+            case PRODUCT_ID:
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
@@ -175,9 +175,9 @@ public class InventoryProvider extends ContentProvider {
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case INVENTORY:
+            case PRODUCTS:
                 return InventoryEntry.CONTENT_LIST_TYPE;
-            case INVENTORY_ID:
+            case PRODUCT_ID:
                 return InventoryEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri + " with match " + match);

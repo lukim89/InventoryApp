@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,13 +65,18 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Android");
-        values.put(InventoryEntry.COLUMN_PRICE, 5);
-        values.put(InventoryEntry.COLUMN_QUANTITY, 10);
-        values.put(InventoryEntry.COLUMN_DESCRIPTION, "bc");
+        values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, 5);
+        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, 10);
+        values.put(InventoryEntry.COLUMN_PRODUCT_DESCRIPTION, "bc");
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, "Google");
         values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, "123454321`");
 
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
+    }
+
+    private void deleteAllProducts() {
+        int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI,null,null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from inventory database");
     }
 
     @Override
@@ -87,6 +93,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 return true;
 
             case R.id.action_delete_all_data:
+                deleteAllProducts();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -97,8 +104,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         String[] projection = {
                 InventoryEntry._ID,
                 InventoryEntry.COLUMN_PRODUCT_NAME,
-                InventoryEntry.COLUMN_PRICE,
-                InventoryEntry.COLUMN_QUANTITY};
+                InventoryEntry.COLUMN_PRODUCT_PRICE,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY};
 
         return new CursorLoader(this,
                 InventoryEntry.CONTENT_URI,

@@ -27,9 +27,9 @@ public class InventoryContract {
 
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_PRODUCT_NAME = "name";
-        public final static String COLUMN_PRICE = "price";
-        public final static String COLUMN_QUANTITY = "quantity";
-        public final static String COLUMN_DESCRIPTION = "description";
+        public final static String COLUMN_PRODUCT_PRICE = "price";
+        public final static String COLUMN_PRODUCT_QUANTITY = "quantity";
+        public final static String COLUMN_PRODUCT_DESCRIPTION = "description";
         public final static String COLUMN_SUPPLIER_NAME = "supplierName";
         public final static String COLUMN_SUPPLIER_PHONE = "supplierPhone";
     }
