@@ -89,6 +89,22 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             return;
         }
 
+        if (TextUtils.isEmpty(nameString)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Please Add the Product Name");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return;
+        }
+
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, nameString);
 
@@ -122,6 +138,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, "Update product successful", Toast.LENGTH_SHORT).show();
             }
         }
+        finish();
     }
 
     @Override
@@ -145,21 +162,21 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         switch (item.getItemId()) {
             case R.id.action_save:
                 saveProduct();
-                finish();
+
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
                 return true;
             case android.R.id.home:
                 if (!mProductHasChange) {
-                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    finish();
                     return true;
                 }
                 DialogInterface.OnClickListener discardButtonClickListener =
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                                finish();
                             }
                         };
                 showUnsavedChangesDialog(discardButtonClickListener);

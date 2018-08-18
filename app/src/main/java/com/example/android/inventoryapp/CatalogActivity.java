@@ -1,13 +1,16 @@
 package com.example.android.inventoryapp;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -17,12 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int INVENTORY_LOADER = 0;
+
+    boolean doubleBackToExit = false;
 
     InventoryCursorAdapter mCursorAdapter;
 
@@ -48,14 +54,15 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         mCursorAdapter = new InventoryCursorAdapter(this, null);
         inventoryListView.setAdapter(mCursorAdapter);
 
-        inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        inventoryListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
                 Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
 
                 intent.setData(currentProductUri);
                 startActivity(intent);
+                return false;
             }
         });
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
@@ -75,8 +82,34 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     private void deleteAllProducts() {
-        int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI,null,null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from inventory database");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Deleting Inventory");
+        builder.setMessage("Do you want to delete ALL inventory?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI,null,null);
+                Log.v("CatalogActivity", rowsDeleted + " rows deleted from inventory database");
+                }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
@@ -123,5 +156,23 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mCursorAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExit) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExit = true;
+        Toast.makeText(this, "Please click back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExit = false;
+            }
+        }, 2000);
     }
 }
