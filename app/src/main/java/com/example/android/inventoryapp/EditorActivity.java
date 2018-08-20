@@ -333,7 +333,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, getString(R.string.editor_delete_product_successful), Toast.LENGTH_SHORT).show();
             }
         }
-        DetailsActivity.detailsActivity.finish();
+        try {
+            DetailsActivity.detailsActivity.finish();
+        } catch (Exception ignored) {
+        }
         finish();
     }
 }
