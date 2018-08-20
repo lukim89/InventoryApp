@@ -8,10 +8,12 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -53,8 +55,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         inventoryListView.setEmptyView(emptyView);
 
         mCursorAdapter = new InventoryCursorAdapter(this, null);
-        View header = getLayoutInflater().inflate(R.layout.list_vew_header, null);
-        inventoryListView.addHeaderView(header);
         inventoryListView.setAdapter(mCursorAdapter);
 
         inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -141,9 +141,12 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             case R.id.action_insert_dummy_data:
                 insertProduct();
                 return true;
-
             case R.id.action_delete_all_data:
                 deleteAllProducts();
+                return true;
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -151,6 +154,16 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String mOrderBy = sharedPrefs.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default));
+
+        String mSortBy = sharedPrefs.getString(
+                getString(R.string.settings_sort_by_key),
+                getString(R.string.settings_sort_by_default));
+
         String[] projection = {
                 InventoryEntry._ID,
                 InventoryEntry.COLUMN_PRODUCT_NAME,
@@ -162,7 +175,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 projection,
                 null,
                 null,
-                null);
+                mOrderBy + " " + mSortBy);
+
     }
 
     @Override
@@ -172,7 +186,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
     }
 
     @Override
@@ -191,5 +204,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 mDoubleBackToExit = false;
             }
         }, 2000);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().restartLoader(INVENTORY_LOADER, null, CatalogActivity.this);
     }
 }

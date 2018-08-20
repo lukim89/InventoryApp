@@ -3,7 +3,13 @@
     <string name="details_activity_title">Product Details</string>
     <string name="edit_activity_title">Edit</string>
     <string name="new_activity_title">New</string>
+    <string name="settings_title">Inventory Settings</string>
     <string name="empty_inventory_message">Your inventory is empty, please add position.</string>
+    <string name="comma_in_price">,</string>
+
+    <string name="details_edit_item_title">Edit</string>
+    <string name="editor_delete_item_title">Delete</string>
+    <string name="editor_save_item_title">Save</string>
 
     <string name="product_name_title">Name:</string>
     <string name="product_price_title">Price:</string>
@@ -48,4 +54,24 @@
 
     <string name="out_of_stock">Out of stock</string>
     <string name="no_price">No Price</string>
+
+    <string name="settings_order_by_label">Order by</string>
+    <string name="settings_order_by_key" translatable="false">order_by</string>
+    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_name_value</string>
+
+    <string name="settings_order_by_name_label">Name</string>
+    <string name="settings_order_by_name_value" translatable="false">name</string>
+    <string name="settings_order_by_price_label">Price</string>
+    <string name="settings_order_by_price_value" translatable="false">price</string>
+    <string name="settings_order_by_quantity_label">Quantity</string>
+    <string name="settings_order_by_quantity_value" translatable="false">quantity</string>
+
+    <string name="settings_sort_by_label">Sort by</string>
+    <string name="settings_sort_by_key" translatable="false">sort_by</string>
+    <string name="settings_sort_by_default" translatable="false">@string/settings_sort_by_ascending_value</string>
+
+    <string name="settings_sort_by_ascending_label">Ascending</string>
+    <string name="settings_sort_by_ascending_value" translatable="false">ASC</string>
+    <string name="settings_sort_by_descending_label">Descending</string>
+    <string name="settings_sort_by_descending_value" translatable="false">DESC</string>
 </resources>

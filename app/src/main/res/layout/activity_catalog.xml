@@ -6,10 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".CatalogActivity">
 
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/header_name"
+            style="@style/ListItemHeader"
+            android:text="@string/product_name_title" />
+
+        <TextView
+            android:id="@+id/header_price"
+            style="@style/ListItemHeader"
+            android:background="@color/colorPrimaryLight"
+            android:text="@string/product_price_title" />
+
+        <TextView
+            android:id="@+id/header_quantity"
+            style="@style/ListItemHeader"
+            android:text="@string/product_quantity_title" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/inventoryListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header_layout" />
 
     <RelativeLayout
         android:id="@+id/empty_view"
