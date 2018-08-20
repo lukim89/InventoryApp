@@ -15,8 +15,29 @@
         android:background="@color/colorSecondaryLight"
         tools:text="@string/product_price_title" />
 
-    <TextView
-        android:id="@+id/item_quantity_text_view"
-        style="@style/ListItems"
-        tools:text="@string/product_quantity_title" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_quantity_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="@dimen/items_text_size"
+            tools:ignore="NestedWeights"
+            tools:text="@string/product_quantity_title" />
+
+        <Button
+            android:id="@+id/sale_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:focusable="false"
+            android:text="@string/sale_button"
+            android:textColor="@color/colorPrimaryDark" />
+    </LinearLayout>
 </LinearLayout>

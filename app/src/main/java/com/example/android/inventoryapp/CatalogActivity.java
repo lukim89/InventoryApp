@@ -82,6 +82,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 return true;
             }
         });
+
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
     }
 
@@ -175,7 +176,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 projection,
                 null,
                 null,
-                mOrderBy + " " + mSortBy);
+                mOrderBy+ " " + mSortBy);
 
     }
 

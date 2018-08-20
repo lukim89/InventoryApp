@@ -22,31 +22,34 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:baselineAligned="false">
 
             <LinearLayout
                 style="@style/DetailLayout"
                 android:layout_width="0dp"
-                android:layout_marginRight="4dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/half_padding"
                 android:layout_weight="1">
 
                 <TextView
                     style="@style/DetailTextView"
-                    android:gravity="start"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:text="@string/product_price_title" />
 
                 <TextView
                     android:id="@+id/product_price"
                     style="@style/DetailTextView"
-                    android:gravity="end"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     tools:text="@string/product_price_title" />
             </LinearLayout>
 
             <LinearLayout
                 style="@style/DetailLayout"
                 android:layout_width="0dp"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="@dimen/half_padding"
                 android:layout_weight="1">
 
                 <TextView
@@ -57,8 +60,31 @@
                 <TextView
                     android:id="@+id/product_quantity"
                     style="@style/DetailTextView"
-                    android:gravity="end"
                     tools:text="@string/product_quantity_title" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorSecondaryDark">
+
+                    <Button
+                        android:id="@+id/decrease_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/decrease_button"
+                        android:textSize="16sp"
+                        tools:ignore="ButtonStyle" />
+
+                    <Button
+                        android:id="@+id/increase_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/increase_button"
+                        android:textSize="16sp"
+                        tools:ignore="ButtonStyle" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

@@ -6,6 +6,9 @@
     <string name="settings_title">Inventory Settings</string>
     <string name="empty_inventory_message">Your inventory is empty, please add position.</string>
     <string name="comma_in_price">,</string>
+    <string name="sale_button">Sale</string>
+    <string name="increase_button">+</string>
+    <string name="decrease_button">-</string>
 
     <string name="details_edit_item_title">Edit</string>
     <string name="editor_delete_item_title">Delete</string>

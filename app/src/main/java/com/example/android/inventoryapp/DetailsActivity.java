@@ -3,6 +3,7 @@ package com.example.android.inventoryapp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
@@ -37,6 +39,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     private TextView mDescriptionEditText;
     private TextView mSupplierNameEditText;
     private TextView mSupplierPhoneEditText;
+
+    private int mQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,37 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 }
             }
         });
+
+
+        Button decreaseButton = findViewById(R.id.decrease_button);
+        decreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDecrement();
+            }
+        });
+
+        Button increaseButton = findViewById(R.id.increase_button);
+        increaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onIncrement();
+            }
+        });
+    }
+
+    public void onIncrement() {
+        ContentValues values = new ContentValues();
+        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, ++mQuantity);
+        getContentResolver().update(mCurrentProductUri, values, null, null);
+    }
+
+    public void onDecrement() {
+        if (mQuantity > 0) {
+            ContentValues values = new ContentValues();
+            values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, --mQuantity);
+            getContentResolver().update(mCurrentProductUri, values, null, null);
+        }
     }
 
     @Override
@@ -143,6 +178,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             mSupplierPhoneEditText.setText(supplierPhone);
 
             mPhoneNumber = supplierPhone;
+            mQuantity = cursor.getInt(quantityColumnIndex);
         }
     }
 
