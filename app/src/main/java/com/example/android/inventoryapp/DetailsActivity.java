@@ -1,18 +1,25 @@
 package com.example.android.inventoryapp;
 
+import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static Activity detailsActivity;
 
     private static final int EXISTING_PRODUCT_LOADER = 0;
     private Uri mCurrentProductUri;
@@ -27,7 +34,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.details_activity);
+        setContentView(R.layout.activity_details);
+        setTitle("Product Details");
+
+        detailsActivity = this;
 
         Intent intent = getIntent();
         mCurrentProductUri = intent.getData();
@@ -40,6 +50,27 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         mDescriptionEditText = findViewById(R.id.product_description);
         mSupplierNameEditText = findViewById(R.id.product_supplier_name);
         mSupplierPhoneEditText = findViewById(R.id.product_supplier_phone);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                Intent intent = new Intent(DetailsActivity.this, EditorActivity.class);
+                intent.setData(mCurrentProductUri);
+                startActivity(intent);
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -93,4 +124,5 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
+
 }

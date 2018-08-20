@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorSecondaryDark"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/product_name"
+            style="@style/DetailLayout"
+            android:layout_marginTop="@dimen/detail_margin"
+            android:gravity="center"
+            android:textSize="@dimen/detail_name_text_size"
+            tools:text="@string/product_name_title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
+
+            <LinearLayout
+                style="@style/DetailLayout"
+                android:layout_width="0dp"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1">
+
+                <TextView
+                    style="@style/DetailTextView"
+                    android:gravity="start"
+                    android:text="@string/product_price_title" />
+
+                <TextView
+                    android:id="@+id/product_price"
+                    style="@style/DetailTextView"
+                    android:gravity="end"
+                    tools:text="@string/product_price_title" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/DetailLayout"
+                android:layout_width="0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1">
+
+                <TextView
+                    style="@style/DetailTextView"
+                    android:gravity="start"
+                    android:text="@string/product_quantity_title" />
+
+                <TextView
+                    android:id="@+id/product_quantity"
+                    style="@style/DetailTextView"
+                    android:gravity="end"
+                    tools:text="@string/product_quantity_title" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/DetailLayout"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/DetailTextView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/product_supplier_name_title" />
+
+            <TextView
+                android:id="@+id/product_supplier_name"
+                style="@style/DetailTextView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                tools:text="@tools:sample/full_names" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/DetailLayout"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/DetailTextView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/product_supplier_phone_title" />
+
+            <TextView
+                android:id="@+id/product_supplier_phone"
+                style="@style/DetailTextView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                tools:text="@tools:sample/us_phones" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/DetailLayout">
+
+            <TextView
+                style="@style/DetailTextView"
+                android:text="@string/product_description_title" />
+
+            <TextView
+                android:id="@+id/product_description"
+                style="@style/DetailTextView"
+                android:gravity="start"
+                tools:text="@tools:sample/lorem/random" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

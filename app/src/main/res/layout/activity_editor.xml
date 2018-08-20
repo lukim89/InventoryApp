@@ -3,48 +3,106 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorSecondary"
     android:orientation="vertical"
     tools:context=".EditorActivity">
 
-    <EditText
-        android:id="@+id/product_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="name"
-        android:inputType="textCapWords" />
+    <LinearLayout
+        style="@style/DetailLayout"
+        android:layout_marginTop="@dimen/detail_margin"
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/product_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="price"
-        android:inputType="number" />
+        <TextView
+            style="@style/DetailTextView"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/product_name_title" />
 
-    <EditText
-        android:id="@+id/product_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="quantity"
-        android:inputType="number" />
+        <EditText
+            android:id="@+id/product_name"
+            style="@style/DetailTextView"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:hint="@string/product_name_hint"
+            android:inputType="textCapWords" />
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/product_description"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="description"
-        android:inputType="textCapWords" />
+        android:baselineAligned="false">
 
-    <EditText
-        android:id="@+id/product_supplier_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="supplier name"
-        android:inputType="textCapWords" />
+        <LinearLayout
+            style="@style/DetailLayout"
+            android:layout_width="0dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1">
 
-    <EditText
-        android:id="@+id/product_supplier_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="supplier phone"
-        android:inputType="phone" />
+            <TextView
+                style="@style/DetailTextView"
+                android:text="@string/product_price_title" />
+
+            <EditText
+                android:id="@+id/product_price"
+                style="@style/DetailTextView"
+                android:hint="@string/product_price_hint"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/DetailLayout"
+            android:layout_width="0dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1">
+
+            <TextView
+                style="@style/DetailTextView"
+                android:text="@string/product_quantity_title" />
+
+            <EditText
+                android:id="@+id/product_quantity"
+                style="@style/DetailTextView"
+                android:hint="@string/product_quantity_hint"
+                android:inputType="number" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout style="@style/DetailLayout">
+
+        <TextView
+            style="@style/DetailTextView"
+            android:text="@string/product_supplier_name_title" />
+
+        <EditText
+            android:id="@+id/product_supplier_name"
+            style="@style/DetailTextView"
+            android:hint="@string/product_supplier_name_hint"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/DetailLayout">
+
+        <TextView
+            style="@style/DetailTextView"
+            android:text="@string/product_supplier_phone_title" />
+
+        <EditText
+            android:id="@+id/product_supplier_phone"
+            style="@style/DetailTextView"
+            android:hint="@string/product_supplier_phone_hint"
+            android:inputType="phone" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/DetailLayout">
+
+        <TextView
+            style="@style/DetailTextView"
+            android:text="@string/product_description_title" />
+
+        <EditText
+            android:id="@+id/product_description"
+            style="@style/DetailTextView"
+            android:hint="@string/product_description_hint"
+            android:inputType="text|textMultiLine" />
+    </LinearLayout>
 </LinearLayout>

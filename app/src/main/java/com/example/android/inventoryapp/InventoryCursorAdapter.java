@@ -24,9 +24,9 @@ public class InventoryCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        TextView nameTextView = view.findViewById(R.id.name);
-        TextView priceTextView = view.findViewById(R.id.price);
-        TextView quantityTextView = view.findViewById(R.id.quantity);
+        TextView nameTextView = view.findViewById(R.id.item_name_text_view);
+        TextView priceTextView = view.findViewById(R.id.item_price_text_view);
+        TextView quantityTextView = view.findViewById(R.id.item_quantity_text_view);
 
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
@@ -41,7 +41,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         }
 
         if (Integer.parseInt(quantity) == 0) {
-            quantity = "No Product";
+            quantity = "Out of stock";
         }
 
         nameTextView.setText(name);

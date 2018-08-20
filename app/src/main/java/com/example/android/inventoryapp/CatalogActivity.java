@@ -11,6 +11,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
@@ -27,8 +28,8 @@ import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int INVENTORY_LOADER = 0;
-
-    boolean doubleBackToExit = false;
+    private long mLastClickTime = 0;
+    boolean mDoubleBackToExit = false;
 
     InventoryCursorAdapter mCursorAdapter;
 
@@ -56,11 +57,17 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position,long id) {
+                if (SystemClock.elapsedRealtime()-mLastClickTime<500) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
                 Intent intent = new Intent(CatalogActivity.this, DetailsActivity.class);
                 Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
                 intent.setData(currentProductUri);
                 startActivity(intent);
+                return;
             }
         });
 
@@ -71,7 +78,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
                 intent.setData(currentProductUri);
                 startActivity(intent);
-                return false;
+                return true;
             }
         });
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
@@ -169,18 +176,18 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExit) {
+        if (mDoubleBackToExit) {
             super.onBackPressed();
             return;
         }
 
-        this.doubleBackToExit = true;
+        this.mDoubleBackToExit = true;
         Toast.makeText(this, "Please click back again to exit", Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                doubleBackToExit = false;
+                mDoubleBackToExit = false;
             }
         }, 2000);
     }

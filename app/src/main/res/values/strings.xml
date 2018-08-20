@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">InventoryApp</string>
+    <string name="empty_inventory_message">Your inventory is empty, please add position.</string>
+    
+    <string name="product_name_title">Name:</string>
+    <string name="product_price_title">Price:</string>
+    <string name="product_quantity_title">Quantity:</string>
+    <string name="product_description_title">Description:</string>
+    <string name="product_supplier_name_title">Supplier Name:</string>
+    <string name="product_supplier_phone_title">Supplier Phone:</string>
+
+    <string name="product_name_hint">add product name</string>
+    <string name="product_price_hint">add price</string>
+    <string name="product_quantity_hint">add quantity</string>
+    <string name="product_description_hint">add description and notes</string>
+    <string name="product_supplier_name_hint">add supplier name</string>
+    <string name="product_supplier_phone_hint">add supplier phone</string>
 </resources>

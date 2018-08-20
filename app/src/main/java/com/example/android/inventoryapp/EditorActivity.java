@@ -161,7 +161,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         switch (item.getItemId()) {
             case R.id.action_save:
                 saveProduct();
-
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
@@ -305,6 +304,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, "Deleted product successful", Toast.LENGTH_SHORT).show();
             }
         }
+        DetailsActivity.detailsActivity.finish();
         finish();
     }
 }

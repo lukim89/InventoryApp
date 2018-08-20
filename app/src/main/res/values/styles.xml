@@ -8,4 +8,32 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ListItems">
+        <item name="android:layout_width">@dimen/items_layout_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/items_text_size</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:paddingBottom">@dimen/items_padding_bottom_top</item>
+        <item name="android:paddingTop">@dimen/items_padding_bottom_top</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="DetailLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/colorSecondaryLight</item>
+        <item name="android:layout_marginBottom">@dimen/detail_margin</item>
+        <item name="android:layout_marginLeft">@dimen/detail_margin</item>
+        <item name="android:layout_marginRight">@dimen/detail_margin</item>
+        <item name="android:padding">@dimen/detail_padding</item>
+    </style>
+
+    <style name="DetailTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/detail_text_size</item>
+    </style>
 </resources>
