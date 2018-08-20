@@ -1,16 +1,20 @@
 package com.example.android.inventoryapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
@@ -21,6 +25,8 @@ import java.text.NumberFormat;
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static Activity detailsActivity;
+
+    public String mPhoneNumber;
 
     private static final int EXISTING_PRODUCT_LOADER = 0;
     private Uri mCurrentProductUri;
@@ -51,6 +57,20 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         mDescriptionEditText = findViewById(R.id.product_description);
         mSupplierNameEditText = findViewById(R.id.product_supplier_name);
         mSupplierPhoneEditText = findViewById(R.id.product_supplier_phone);
+
+        View phoneCallLayout = findViewById(R.id.phone_call_layout);
+        phoneCallLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ActivityCompat.checkSelfPermission(DetailsActivity.this,
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    String uri = "tel:" + mPhoneNumber.trim();
+                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+                    phoneIntent.setData(Uri.parse(uri));
+                    startActivity(phoneIntent);
+                }
+            }
+        });
     }
 
     @Override
@@ -111,7 +131,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             String quantity = cursor.getString(quantityColumnIndex);
             String description = cursor.getString(descriptionColumnIndex);
             String supplierName = cursor.getString(supplierNameColumnIndex);
-            String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
+            final String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
 
             BigDecimal priceDecimal = new BigDecimal(price).movePointLeft(2);
             mPriceEditText.setText(NumberFormat.getCurrencyInstance().format(priceDecimal));
@@ -121,6 +141,8 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             mDescriptionEditText.setText(description);
             mSupplierNameEditText.setText(supplierName);
             mSupplierPhoneEditText.setText(supplierPhone);
+
+            mPhoneNumber = supplierPhone;
         }
     }
 
