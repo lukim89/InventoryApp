@@ -53,12 +53,14 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         inventoryListView.setEmptyView(emptyView);
 
         mCursorAdapter = new InventoryCursorAdapter(this, null);
+        View header = getLayoutInflater().inflate(R.layout.list_vew_header, null);
+        inventoryListView.addHeaderView(header);
         inventoryListView.setAdapter(mCursorAdapter);
 
         inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position,long id) {
-                if (SystemClock.elapsedRealtime()-mLastClickTime<500) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -67,7 +69,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
                 intent.setData(currentProductUri);
                 startActivity(intent);
-                return;
             }
         });
 
@@ -87,28 +88,28 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     private void insertProduct() {
 
         ContentValues values = new ContentValues();
-        values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Android");
-        values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, 5);
-        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, 10);
-        values.put(InventoryEntry.COLUMN_PRODUCT_DESCRIPTION, "bc");
-        values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, "Google");
-        values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, "123454321`");
+        values.put(InventoryEntry.COLUMN_PRODUCT_NAME, getString(R.string.dummy_product_name));
+        values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, getString(R.string.dummy_product_price));
+        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, getString(R.string.dummy_product_quantity));
+        values.put(InventoryEntry.COLUMN_PRODUCT_DESCRIPTION, getString(R.string.dummy_product_description));
+        values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, getString(R.string.dummy_product_name));
+        values.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, getString(R.string.dummy_product_supplier_phone));
 
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
     }
 
     private void deleteAllProducts() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Deleting Inventory");
-        builder.setMessage("Do you want to delete ALL inventory?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.delete_all_alert_title));
+        builder.setMessage(R.string.delete_all_alert_message);
+        builder.setPositiveButton(getString(R.string.yes_alert_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI,null,null);
+                int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
                 Log.v("CatalogActivity", rowsDeleted + " rows deleted from inventory database");
-                }
+            }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.no_alert_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 if (dialog != null) {
@@ -116,7 +117,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 }
             }
         });
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(getString(R.string.cancel_alert_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 if (dialog != null) {
@@ -182,7 +183,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         }
 
         this.mDoubleBackToExit = true;
-        Toast.makeText(this, "Please click back again to exit", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.exit_alert), Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
             @Override

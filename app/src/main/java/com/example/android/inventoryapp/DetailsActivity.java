@@ -2,9 +2,7 @@ package com.example.android.inventoryapp;
 
 import android.app.Activity;
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -16,6 +14,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
+
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -34,10 +35,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
-        setTitle("Product Details");
-
         detailsActivity = this;
+
+        setContentView(R.layout.activity_details);
+        setTitle(getString(R.string.details_activity_title));
 
         Intent intent = getIntent();
         mCurrentProductUri = intent.getData();
@@ -106,14 +107,16 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             int supplierPhoneColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_PHONE);
 
             String name = cursor.getString(nameColumnIndex);
-            String price = cursor.getString(priceColumnIndex);
+            int price = cursor.getInt(priceColumnIndex);
             String quantity = cursor.getString(quantityColumnIndex);
             String description = cursor.getString(descriptionColumnIndex);
             String supplierName = cursor.getString(supplierNameColumnIndex);
             String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
 
+            BigDecimal priceDecimal = new BigDecimal(price).movePointLeft(2);
+            mPriceEditText.setText(NumberFormat.getCurrencyInstance().format(priceDecimal));
+
             mNameEditText.setText(name);
-            mPriceEditText.setText(price);
             mQuantityEditText.setText(quantity);
             mDescriptionEditText.setText(description);
             mSupplierNameEditText.setText(supplierName);

@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryContract.InventoryEntry;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+
 public class InventoryCursorAdapter extends CursorAdapter {
 
-    public InventoryCursorAdapter(Context context, Cursor c) {
+    InventoryCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
 
@@ -33,19 +36,23 @@ public class InventoryCursorAdapter extends CursorAdapter {
         int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
 
         String name = cursor.getString(nameColumnIndex);
-        String price = cursor.getString(priceColumnIndex);
+        String priceString = cursor.getString(priceColumnIndex);
         String quantity = cursor.getString(quantityColumnIndex);
 
-        if (Integer.parseInt(price) == 0) {
-            price = "No Price";
+        int price = Integer.parseInt(priceString);
+        if (price == 0) {
+            priceString = context.getString(R.string.no_price);
+            priceTextView.setText(priceString);
+        } else {
+            BigDecimal priceDecimal = new BigDecimal(price).movePointLeft(2);
+            priceTextView.setText(NumberFormat.getCurrencyInstance().format(priceDecimal));
         }
 
         if (Integer.parseInt(quantity) == 0) {
-            quantity = "Out of stock";
+            quantity = context.getString(R.string.out_of_stock);
         }
 
         nameTextView.setText(name);
-        priceTextView.setText(price);
         quantityTextView.setText(quantity);
     }
 }

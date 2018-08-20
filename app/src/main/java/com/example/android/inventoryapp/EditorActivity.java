@@ -27,6 +27,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Uri mCurrentProductUri;
     private EditText mNameEditText;
     private EditText mPriceEditText;
+    private EditText mPriceSideEditText;
     private EditText mQuantityEditText;
     private EditText mDescriptionEditText;
     private EditText mSupplierNameEditText;
@@ -51,15 +52,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mCurrentProductUri = intent.getData();
 
         if (mCurrentProductUri == null) {
-            setTitle("New");
+            setTitle(getString(R.string.new_activity_title));
             invalidateOptionsMenu();
         } else {
-            setTitle("Edit");
+            setTitle(getString(R.string.edit_activity_title));
             getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
 
         mNameEditText = findViewById(R.id.product_name);
         mPriceEditText = findViewById(R.id.product_price);
+        mPriceSideEditText = findViewById(R.id.product_price_double);
         mQuantityEditText = findViewById(R.id.product_quantity);
         mDescriptionEditText = findViewById(R.id.product_description);
         mSupplierNameEditText = findViewById(R.id.product_supplier_name);
@@ -67,6 +69,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         mNameEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+        mPriceSideEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mDescriptionEditText.setOnTouchListener(mTouchListener);
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
@@ -76,6 +79,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private void saveProduct() {
         String nameString = mNameEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
+        String priceDoubleString = mPriceSideEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         String descriptionString = mDescriptionEditText.getText().toString().trim();
         String supplierNameString = mSupplierNameEditText.getText().toString().trim();
@@ -90,8 +94,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if (TextUtils.isEmpty(nameString)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Please Add the Product Name");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setMessage(getString(R.string.empty_name_alert_message));
+            builder.setPositiveButton(getString(R.string.ok_alert_button), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
                     if (dialog != null) {
@@ -108,8 +112,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, nameString);
 
         int price = 0;
-        if (!TextUtils.isEmpty(priceString)) {
-            price = Integer.parseInt(priceString);
+        String priceStringMarge;
+        if (!(TextUtils.isEmpty(priceString)) || !(TextUtils.isEmpty(priceDoubleString))) {
+            if (TextUtils.isEmpty(priceDoubleString)) {
+                priceStringMarge = priceString + "00";
+            } else {
+                priceStringMarge = (priceString + priceDoubleString);
+            }
+            price = Integer.parseInt(priceStringMarge);
         }
         values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, price);
 
@@ -125,16 +135,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (mCurrentProductUri == null) {
             Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
             if (newUri == null) {
-                Toast.makeText(this, "Insert product failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_insert_product_failed), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Insert product successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_insert_product_successful), Toast.LENGTH_SHORT).show();
             }
         } else {
             int rowsAffected = getContentResolver().update(mCurrentProductUri, values, null, null);
             if (rowsAffected == 0) {
-                Toast.makeText(this, "Update product failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_update_product_failed), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Update product successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_update_product_successful), Toast.LENGTH_SHORT).show();
             }
         }
         finish();
@@ -239,8 +249,26 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             String supplierName = cursor.getString(supplierNameColumnIndex);
             String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
 
+            String priceMain = null;
+            String priceSide = null;
+
+            if (price > 0) {
+                if (price >= 100) {
+                    String priceString = Integer.toString(price);
+                    priceSide = priceString.length() > 2 ? priceString.substring(priceString.length() - 2) : priceString;
+                    priceMain = priceString.substring(0, priceString.length() - 2);
+                } else if (price > 9) {
+                    priceMain = "0";
+                    priceSide = Integer.toString(price);
+                } else {
+                    priceMain = "0";
+                    priceSide = "0" + Integer.toString(price);
+                }
+            }
+
             mNameEditText.setText(name);
-            mPriceEditText.setText(Integer.toString(price));
+            mPriceEditText.setText(priceMain);
+            mPriceSideEditText.setText(priceSide);
             mQuantityEditText.setText(Integer.toString(quantity));
             mDescriptionEditText.setText(description);
             mSupplierNameEditText.setText(supplierName);
@@ -252,6 +280,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public void onLoaderReset(Loader<Cursor> loader) {
         mNameEditText.setText("");
         mPriceEditText.setText("");
+        mPriceSideEditText.setText("");
         mQuantityEditText.setText("");
         mDescriptionEditText.setText("");
         mSupplierNameEditText.setText("");
@@ -260,9 +289,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Unsaved changes");
-        builder.setPositiveButton("discard", discardButtonClickListener);
-        builder.setNegativeButton("Stay", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.unsaved_changes_dialog_message));
+        builder.setPositiveButton(getString(R.string.discard_alert_button), discardButtonClickListener);
+        builder.setNegativeButton(getString(R.string.keep_editing_alert_button), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (dialog != null) {
                     dialog.dismiss();
@@ -276,14 +305,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to delete this product?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.delete_alert_message));
+        builder.setPositiveButton(getString(R.string.yes_alert_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 deleteProduct();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel_alert_button), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 if (dialog != null) {
@@ -299,9 +328,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (mCurrentProductUri != null) {
             int rowDeleted = getContentResolver().delete(mCurrentProductUri, null, null);
             if (rowDeleted == 0) {
-                Toast.makeText(this, "Deleted product failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_delete_product_failed), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Deleted product successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_delete_product_successful), Toast.LENGTH_SHORT).show();
             }
         }
         DetailsActivity.detailsActivity.finish();

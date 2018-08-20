@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">InventoryApp</string>
+    <string name="details_activity_title">Product Details</string>
+    <string name="edit_activity_title">Edit</string>
+    <string name="new_activity_title">New</string>
     <string name="empty_inventory_message">Your inventory is empty, please add position.</string>
-    
+
     <string name="product_name_title">Name:</string>
     <string name="product_price_title">Price:</string>
     <string name="product_quantity_title">Quantity:</string>
@@ -15,4 +18,34 @@
     <string name="product_description_hint">add description and notes</string>
     <string name="product_supplier_name_hint">add supplier name</string>
     <string name="product_supplier_phone_hint">add supplier phone</string>
+
+    <string name="dummy_product_name">Google Pixel 2XL</string>
+    <string name="dummy_product_price">150000</string>
+    <string name="dummy_product_quantity">50</string>
+    <string name="dummy_product_description">Snapdragon 835, RAM 4GB,  64 GB, Android 8.0 Oreo </string>
+    <string name="dummy_product_supplier_name">Google</string>
+    <string name="dummy_product_supplier_phone">222 555 888</string>
+
+    <string name="exit_alert">Press again to exit!</string>
+    <string name="cancel_alert_button">Cancel</string>
+    <string name="yes_alert_button">Yes</string>
+    <string name="no_alert_button">No</string>
+    <string name="ok_alert_button">OK</string>
+    <string name="delete_all_alert_title">Delete the database!</string>
+    <string name="delete_all_alert_message">Do you really want to delete ALL items?</string>
+    <string name="empty_name_alert_message">Please add the product name</string>
+    <string name="delete_alert_message">Delete this product?</string>
+
+    <string name="editor_delete_product_successful">Product deleted</string>
+    <string name="editor_delete_product_failed">Error with deleting product</string>
+    <string name="editor_insert_product_successful">Product saved</string>
+    <string name="editor_insert_product_failed">Error with saving product</string>
+    <string name="editor_update_product_successful">Product updated</string>
+    <string name="editor_update_product_failed">Error with updating product</string>
+    <string name="unsaved_changes_dialog_message">Discard your changes and quit editing?</string>
+    <string name="discard_alert_button">Discard</string>
+    <string name="keep_editing_alert_button">Keep Editing</string>
+
+    <string name="out_of_stock">Out of stock</string>
+    <string name="no_price">No Price</string>
 </resources>

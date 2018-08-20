@@ -42,11 +42,34 @@
                 style="@style/DetailTextView"
                 android:text="@string/product_price_title" />
 
-            <EditText
-                android:id="@+id/product_price"
-                style="@style/DetailTextView"
-                android:hint="@string/product_price_hint"
-                android:inputType="numberDecimal" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/product_price"
+                    style="@style/DetailTextView"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
+                    android:gravity="end"
+                    android:hint="@string/product_price_hint"
+                    android:inputType="numberDecimal"
+                    android:maxLength="7" />
+
+                <TextView
+                    style="@style/DetailTextView"
+                    android:layout_width="4dp"
+                    android:text="," />
+
+                <EditText
+                    android:id="@+id/product_price_double"
+                    style="@style/DetailTextView"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:inputType="numberDecimal"
+                    android:maxLength="2" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +86,8 @@
                 android:id="@+id/product_quantity"
                 style="@style/DetailTextView"
                 android:hint="@string/product_quantity_hint"
-                android:inputType="number" />
+                android:inputType="number"
+                android:maxLength="9" />
         </LinearLayout>
     </LinearLayout>
 
